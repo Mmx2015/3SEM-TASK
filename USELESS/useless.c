@@ -45,10 +45,13 @@ int useless(char *str){
     strcpy(command,p+1);
 
     //Executing the command. (may not be the best way to use here execl?)
-    if(execl(command,0)<0){
+    if(execl(command,NULL)<0){
         printf("%s%s%s\n","Program ",command," failed to load.");
         exit(0);
     }
+
+    //To get rid of warning: "Control may reach the end of non-void function".
+    exit(-1);
 }
 
 
@@ -68,7 +71,7 @@ int main(){
     	    printf("%s\n","Can't open file!");
             exit(-1);
     }
-    
+
     //Creating dynamic string to store entered commands.
     str=malloc(100);
     cur=str;
