@@ -1,7 +1,7 @@
 //First Task. Part One. USELESS.
 //Name of input file is input.txt
 
-//Some useful libraries.
+//Some useful headers.
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -11,6 +11,9 @@
 #include <fcntl.h>
 #include <string.h>
 #include <stdlib.h>
+
+//Constants.
+
 
 //File variable.
 int file;
@@ -62,7 +65,7 @@ int main(){
     while (size!=0){
         //Reading one symbool from file.
         size=read(file,&c,1);
-        //Maximum string size is 10.
+        //Maximum string size is 100.
 	    if((c==10)||(size==0)){ 	    
 		  *cur=0;
 		  if(strlen(str)>0){ 
