@@ -13,7 +13,12 @@
 #include <stdlib.h>
 
 //Global constants.
+//"\n" symbol as End of Line.
 char NextLine = 10;
+//Calculus base for "strtol" function.
+int CalculusBase = 10;
+//Maximum string size.
+int MaxStringSize = 100;
 
 //No global variables.
 
@@ -24,7 +29,7 @@ int useless(char *str){
     //Variable that stores pause time.
     int pause;
     //Dynamic string to store commands.
-    char *command=malloc(100),*p;
+    char *command=malloc(MaxStringSize),*p;
     //Child process PID.
     pid_t pid;
 
@@ -36,7 +41,7 @@ int useless(char *str){
     if (pid>0) return 0;
 
     //This function converts string to long int. 10 is the count basis. End of long int string value stores into P.
-    pause=strtol(str,&p,10);
+    pause=strtol(str,&p,CalculusBase);
 
     //Pausing for PAUSE milliseconds. 
     sleep(pause);
@@ -44,7 +49,7 @@ int useless(char *str){
     //Copying command string to COMMAND variable.
     strcpy(command,p+1);
 
-    //Executing the command. (may not be the best way to use here execl?)
+    //We use "execl" this way, because it's easy not to resolve string by arguments.
     if(execl(command,NULL)<0){
         printf("%s%s%s\n","Program ",command," failed to load.");
         exit(0);
@@ -73,14 +78,13 @@ int main(){
     }
 
     //Creating dynamic string to store entered commands.
-    str=malloc(100);
+    str=malloc(MaxStringSize);
     cur=str;
 	size=1;
     //This while reads string and loads USELESS function.
     while (size!=0){
         //Reading one symbool from file.
         size=read(file,&c,1);
-        //Maximum string size is 100.
 	    if((c == NextLine)||(size==0)){ 	    
 		  *cur=0;
 		  if(strlen(str)>0){ 
