@@ -12,36 +12,38 @@
 #include <string.h>
 #include <stdlib.h>
 
-//Constants.
+//Global constants.
+char NextLine = 10;
 
-
-//File variable.
-int file;
-//c - temporary char variable. str & cur - pointers to strings.
-char c,*str,*cur;
-//Temporary variable to store string size.
-ssize_t size;
-
+//No global variables.
 
 //Function that executes command stored in string.
 int useless(char *str){
+
+    //Variables.
     //Variable that stores pause time.
     int pause;
     //Dynamic string to store commands.
     char *command=malloc(100),*p;
     //Child process PID.
     pid_t pid;
+
     //Detecting whether child process is created.
     if((pid=fork())<0){
 	   printf("%s\n","Can't create child process.");
 	   exit(-1);
     }
     if (pid>0) return 0;
+
     //This function converts string to long int. 10 is the count basis. End of long int string value stores into P.
-    pause=strtol(str,&p,10); 
+    pause=strtol(str,&p,10);
+
+    //Pausing for PAUSE milliseconds. 
     sleep(pause);
+
     //Copying command string to COMMAND variable.
     strcpy(command,p+1);
+
     //Executing the command. (may not be the best way to use here execl?)
     if(execl(command,0)<0){
         printf("%s%s%s\n","Program ",command," failed to load.");
@@ -52,11 +54,21 @@ int useless(char *str){
 
 //Function main.
 int main(){ 
+
+    //Variables.
+    //File variable.
+    int file;
+    //c - temporary char variable. str & cur - pointers to strings.
+    char c,*str,*cur;
+    //Temporary variable to store string size.
+    ssize_t size;
+
     //Opening file "input.txt".
     if((file=open("input.txt",O_RDONLY))<0){
     	    printf("%s\n","Can't open file!");
             exit(-1);
     }
+    
     //Creating dynamic string to store entered commands.
     str=malloc(100);
     cur=str;
@@ -66,7 +78,7 @@ int main(){
         //Reading one symbool from file.
         size=read(file,&c,1);
         //Maximum string size is 100.
-	    if((c==10)||(size==0)){ 	    
+	    if((c == NextLine)||(size==0)){ 	    
 		  *cur=0;
 		  if(strlen(str)>0){ 
 		      useless(str);
