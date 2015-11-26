@@ -1,4 +1,2 @@
-30 /bin/ls
 1 /bin/ls
-14 /bin/ls
-12 /bin/ls
+2 /bin/pwd
