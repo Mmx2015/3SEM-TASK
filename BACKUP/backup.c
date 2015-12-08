@@ -122,26 +122,41 @@ int read_dir(const char *_drname){
 
 	//While directory isn't empty...
 	while(nm){
+		
+		//Printing full path to "path" variable.
 		sprintf(path,"%s/%s",drname,nm->d_name);
+		//Getting statistics for file.
 		i=stat(path,&st);
+
+
+		//If statistics can't be got - print error.
 		if(i==-1){
 			perror(path);
 		}
+		//Another case
 		else{
+			//Saving adress of backup gz.
 			sprintf(pathgz,"%s/%s/%s",dest,_drname,nm->d_name);
+			//Looking for file type.
 			switch (st.st_mode&S_IFMT){
+				//If directory
 		 		case S_IFDIR:{
+		 		    //Making directory.
 					mkdir(pathgz,0777);
 					sprintf(relpath,s,_drname,nm->d_name);
+					//Recursion.
 					read_dir(relpath);
 					break;
 		       	}
+		       	//If regular file
 		    	case S_IFREG:{
+		    		//Backup it.
 					i=backup(path,pathgz,st.st_mtime);
 					break;
 		       	}
 		   	}	
 	    }
+	    //Going further (levelling down).
 		nm=readdir(dr);	
 	 }
 
